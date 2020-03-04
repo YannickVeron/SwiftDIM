@@ -7,6 +7,10 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		ED1DEAFE240FB68700B6C348 /* MovieListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = ED1DEAFD240FB68700B6C348 /* MovieListViewController.swift */; };
+		ED1DEB01240FBC1800B6C348 /* MovieTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = ED1DEAFF240FBC1800B6C348 /* MovieTableViewCell.swift */; };
+		ED1DEB02240FBC1800B6C348 /* MovieTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = ED1DEB00240FBC1800B6C348 /* MovieTableViewCell.xib */; };
+		ED1DEB042410090100B6C348 /* ImageUrlLoader.swift in Sources */ = {isa = PBXBuildFile; fileRef = ED1DEB032410090100B6C348 /* ImageUrlLoader.swift */; };
 		ED763734240E4FF5003AC676 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = ED763733240E4FF5003AC676 /* AppDelegate.swift */; };
 		ED763736240E4FF5003AC676 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = ED763735240E4FF5003AC676 /* SceneDelegate.swift */; };
 		ED763738240E4FF5003AC676 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = ED763737240E4FF5003AC676 /* ViewController.swift */; };
@@ -17,6 +21,10 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		ED1DEAFD240FB68700B6C348 /* MovieListViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MovieListViewController.swift; sourceTree = "<group>"; };
+		ED1DEAFF240FBC1800B6C348 /* MovieTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = MovieTableViewCell.swift; path = ProjectDim/Views/MovieTableViewCell.swift; sourceTree = SOURCE_ROOT; };
+		ED1DEB00240FBC1800B6C348 /* MovieTableViewCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = MovieTableViewCell.xib; path = ProjectDim/Views/MovieTableViewCell.xib; sourceTree = SOURCE_ROOT; };
+		ED1DEB032410090100B6C348 /* ImageUrlLoader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = ImageUrlLoader.swift; path = ProjectDim/ImageUrlLoader.swift; sourceTree = SOURCE_ROOT; };
 		ED763730240E4FF5003AC676 /* ProjectDim.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ProjectDim.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		ED763733240E4FF5003AC676 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		ED763735240E4FF5003AC676 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -75,6 +83,7 @@
 		ED763749240E5B07003AC676 /* Controllers */ = {
 			isa = PBXGroup;
 			children = (
+				ED1DEAFD240FB68700B6C348 /* MovieListViewController.swift */,
 			);
 			path = Controllers;
 			sourceTree = "<group>";
@@ -83,6 +92,7 @@
 			isa = PBXGroup;
 			children = (
 				ED763747240E547F003AC676 /* Movie.swift */,
+				ED1DEB032410090100B6C348 /* ImageUrlLoader.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -90,6 +100,8 @@
 		ED76374B240E5B1C003AC676 /* Views */ = {
 			isa = PBXGroup;
 			children = (
+				ED1DEAFF240FBC1800B6C348 /* MovieTableViewCell.swift */,
+				ED1DEB00240FBC1800B6C348 /* MovieTableViewCell.xib */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -154,6 +166,7 @@
 			files = (
 				ED763740240E4FF9003AC676 /* LaunchScreen.storyboard in Resources */,
 				ED76373D240E4FF9003AC676 /* Assets.xcassets in Resources */,
+				ED1DEB02240FBC1800B6C348 /* MovieTableViewCell.xib in Resources */,
 				ED76373B240E4FF5003AC676 /* Main.storyboard in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -166,7 +179,10 @@
 			buildActionMask = 2147483647;
 			files = (
 				ED763738240E4FF5003AC676 /* ViewController.swift in Sources */,
+				ED1DEAFE240FB68700B6C348 /* MovieListViewController.swift in Sources */,
+				ED1DEB01240FBC1800B6C348 /* MovieTableViewCell.swift in Sources */,
 				ED763734240E4FF5003AC676 /* AppDelegate.swift in Sources */,
+				ED1DEB042410090100B6C348 /* ImageUrlLoader.swift in Sources */,
 				ED763748240E547F003AC676 /* Movie.swift in Sources */,
 				ED763736240E4FF5003AC676 /* SceneDelegate.swift in Sources */,
 			);
