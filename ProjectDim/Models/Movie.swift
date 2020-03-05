@@ -16,32 +16,92 @@ enum Category : String{
     case Fantastique="Fantastique"
 }
 
+enum imageType {
+    case backdrop
+    case poster
+}
+
 struct Movie {
     
     var title : String
     var subtitle : String
-    var realeaseDate : Int
+    var releaseDate : Int
     var duration : Int //duration in minutes
     var categories : [Category]
     var synopsis : String
-    var poster : UIImage?
-    var banner : UIImage
+    var poster : String?
+    var banner : String
     var trailerURL: URL
+    var id: Int?
     
-    func humanReadableDuration()-> String{
+    init(title: String, subtitle: String, realeaseDate: Int, duration: Int, categories: [Category], synopsis: String,poster: String? , banner: String, trailerURL: URL){
+        self.title=title
+        self.subtitle=subtitle
+        self.releaseDate=realeaseDate
+        self.duration=duration
+        self.categories=categories
+        self.synopsis=synopsis
+        self.poster=poster
+        self.banner=banner
+        self.trailerURL=trailerURL
+    }
+    
+    init?(response : MovieResponse){
+        let _url = URL(string: "https://youtu.be/bD7bpG-zDJQ")
+        let dateFormater=DateFormatter()
+        dateFormater.dateFormat = "yyyy-MM-dd"
+        guard let responseTitle = response.title,let responseOverview = response.overview,let url = _url,let dateString=response.releaseDate, let date=dateFormater.date(from: dateString), let responseId = response.id, let responsePoster=response.posterPath, let responseBackdrop=response.backdropPath else {
+            return nil
+        }
+        dateFormater.dateFormat="yyyy"
+        title=responseTitle
+        subtitle=""
+        releaseDate=Int(dateFormater.string(from: date))! //TODO : remove force cast
+        duration=0
+        categories=[]
+        synopsis=responseOverview
+        poster=responsePoster
+        banner=responseBackdrop
+        trailerURL=url
+        id=responseId
+    }
+    
+    init?(response : MovieDetailResponse){
+        let _url = URL(string: "https://youtu.be/bD7bpG-zDJQ")
+        let dateFormater=DateFormatter()
+        dateFormater.dateFormat = "yyyy-MM-dd"
+        guard let responseTitle = response.title,let responseOverview = response.overview,let url = _url,let dateString=response.releaseDate, let date=dateFormater.date(from: dateString), let responseId = response.id, let responsePoster=response.posterPath, let responseBackdrop=response.backdropPath else {
+            return nil
+        }
+        dateFormater.dateFormat="yyyy"
+        title=responseTitle
+        subtitle=""
+        releaseDate=Int(dateFormater.string(from: date))! //TODO : remove force cast
+        duration=0
+        categories=[]
+        synopsis=responseOverview
+        poster=responsePoster
+        banner=responseBackdrop
+        trailerURL=url
+        id=responseId
+    }
+    
+    
+    
+    func humanReadableDuration()-> String{//function
         if duration<60{
             return "\(duration) mn"
         }
         let (hours, minutes) = duration.quotientAndRemainder(dividingBy: 60)
         return "\(hours) h \(minutes) mn"
     }
-    var categoriesString : String{//Computed Property
+    var categoriesString : String{//Computed Property - cannot be let
         return categories.map({(cat) -> String in
                 return cat.rawValue
             }).joined(separator: "/")
     }
     
-    static func getMovie()->Movie?{
+    /*static func getMovie()->Movie?{
         let synops = "L'univers de Star Wars se déroule dans une galaxie qui est le théâtre d'affrontements entre les Chevaliers Jedi et les Seigneurs noirs des Sith, personnes sensibles à la Force, un champ énergétique mystérieux leur procurant des pouvoirs psychiques. Les Jedi maîtrisent le Côté lumineux de la Force, pouvoir bénéfique et défensif, pour maintenir la paix dans la galaxie. Les Sith utilisent le Côté obscur, pouvoir nuisible et destructeur, pour leurs usages personnels et pour dominer la galaxie1. \n Pour amener la paix, une République galactique a été fondée avec pour capitale la planète Coruscant. Mais, tout au long de son existence, la République est secouée par des sécessions et des guerres1. En 33 av. BY, une nouvelle crise menace la stabilité de ce régime politique.\n Depuis quelques années, une organisation montante, la Fédération du commerce détient le quasi monopole des échanges commerciaux dans la région de la Bordure extérieure. Sur le conseil de l'ambitieux sénateur Palpatine de la planète Naboo, le chef d'État de la République, le Chancelier Suprême Finis Valorum décide donc de taxer les transactions commerciales pour affaiblir le monopole de la Fédération. Prétextant que leurs vaisseaux commerciaux se font régulièrement attaquer par des pirates, les dirigeants de la Fédération demandent alors au chancelier l'autorisation de créer une armée de droïdes pour protéger ses transports. \n Quelques mois plus tard, en 32 av. BY, la situation se dégrade encore. Plusieurs membres du directoire de la Fédération du commerce sont assassinés. L'ambitieux Nute Gunray est alors nommé vice-roi de la Fédération. Conseillé par un homme mystérieux nommé Sidious, il décide alors d'organiser un embargo sur la planète de Naboo pour se venger du sénateur Palpatine, l'instigateur de la taxe commerciale"
         let _poster = UIImage(named:"SW1_Poster")
         let _banner = UIImage(named:"SW1_Banner")
@@ -51,5 +111,5 @@ struct Movie {
         }
         
         return Movie(title: "StarWars I", subtitle: "La Menace fantôme", realeaseDate: 1999, duration: 136, categories: [Category.SF,Category.Aventure,Category.Fantastique], synopsis: synops,poster: posterImg , banner: bannerImg, trailerURL: trailer)
-    }
+    }*/
 }

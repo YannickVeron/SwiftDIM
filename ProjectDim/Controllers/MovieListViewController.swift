@@ -14,52 +14,50 @@ class MovieListViewController:/*UINavigationController*/UIViewController, UITabl
     @IBOutlet weak var tableView: UITableView!
     let cellID="MovieCellID"
     var movies : [Movie] = []
+    var selectedMovie : Movie?
 
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        if let posterImg=UIImage(named:"SW1_Poster"), let bannerImg=UIImage(named:"SW1_Banner"), let trailerLink = URL(string:"https://youtu.be/bD7bpG-zDJQ") {
-            movies.append(Movie(title: "Star Wars I", subtitle: "La Menace fantôme", realeaseDate: 1999, duration: 136, categories: [Category.Aventure,Category.Fantastique], synopsis: "En 33 av. BY, une nouvelle crise menace la stabilité de ce régime politique.\n Depuis quelques années, une organisation montante, la Fédération du commerce détient le quasi monopole des échanges commerciaux dans la région de la Bordure extérieure. Sur le conseil de l'ambitieux sénateur Palpatine de la planète Naboo, le chef d'État de la République, le Chancelier Suprême Finis Valorum décide donc de taxer les transactions commerciales pour affaiblir le monopole de la Fédération. Prétextant que leurs vaisseaux commerciaux se font régulièrement attaquer par des pirates, les dirigeants de la Fédération demandent alors au chancelier l'autorisation de créer une armée de droïdes pour protéger ses transports. \n Quelques mois plus tard, en 32 av. BY, la situation se dégrade encore. Plusieurs membres du directoire de la Fédération du commerce sont assassinés. L'ambitieux Nute Gunray est alors nommé vice-roi de la Fédération. Conseillé par un homme mystérieux nommé Sidious, il décide alors d'organiser un embargo sur la planète de Naboo pour se venger du sénateur Palpatine, l'instigateur de la taxe commerciale",poster: posterImg , banner: bannerImg, trailerURL: trailerLink))
+
+        /*let API_KEY = "bc1c540985c64209509d0beaecc09fa5"
+        let base_url = "https://api.themoviedb.org"
+        var stringUrl = base_url+"/3/movie/550?api_key="+API_KEY
+        stringUrl = "https://api.themoviedb.org/3/discover/movie?api_key=bc1c540985c64209509d0beaecc09fa5&language=fr-FR&sort_by=popularity.desc&include_adult=false&include_video=false&page=1"
+        let url = URL(string:stringUrl)!
+        URLSession.shared.dataTask(with: url){(data,response,error) in
+            guard error==nil else {
+                //TODO : handle error
+                return
+            }
+            if let data=data{
+                let decoder = JSONDecoder()
+                decoder.keyDecodingStrategy = .convertFromSnakeCase
+                let response:MoviesResponse? = try? decoder.decode(MoviesResponse.self, from: data)
+                print(response?.totalResults)
+                print(response?.results?[0])
+            }
+            return
+        }.resume()*/
+        movies.removeAll()
+    APIService.makeRequest(request:"/discover/movie?language=fr-FR&sort_by=popularity.desc&include_adult=false&include_video=false&page=1&"){moviesResponse in
+        if let results = moviesResponse.results{
+                for response:MovieResponse in results{
+                    if let movie = Movie(response: response){
+                        self.movies.append(movie)
+                        DispatchQueue.main.async() {//queue the image update on the main thread
+                            self.tableView.reloadData()
+                        }
+                    }
+                }
+            }
         }
-        if let posterImg=UIImage(named:"SW2_Poster"), let bannerImg=UIImage(named:"SW2_Banner"), let trailerLink = URL(string:"https://youtu.be/gYbW1F_c9eM") {
-            movies.append(Movie(title: "Star Wars II", subtitle: "L'Attaque des clones", realeaseDate: 2002, duration: 142, categories: [Category.SF], synopsis: "Pour amener la paix, une République galactique a été fondée, avec pour capitale la planète Coruscant. Mais, tout au long de son existence, la République est secouée par des sécessions et des guerres. Ce fut le cas en 32 av. BY lors des événements narrés dans le film La Menace fantôme. Dix ans plus tard, en 22 av. BY, la République est une nouvelle fois menacée.Menés par l'ancien Jedi Dooku, des milliers de systèmes solaires menacent de faire sécession. Les chevaliers Jedi s'avèrent alors trop peu nombreux pour assurer le maintien de la paix dans l'ensemble de la galaxie. Sur la planète Ansion, le Jedi Obi-Wan Kenobi et son apprenti Anakin Skywalker parviennent à convaincre les autorités locales de ne pas quitter la République. Mais, à Coruscant, de nombreux sénateurs souhaitent qu'une armée soit mise sur pied au cas où une guerre de sécession éclaterait.",poster: posterImg , banner: bannerImg, trailerURL: trailerLink))
-        }
-        if let posterImg=UIImage(named:"SW3_Poster"), let bannerImg=UIImage(named:"SW3_Banner"), let trailerLink = URL(string:"https://youtu.be/5UnjrG_N8hU") {
-            movies.append(Movie(title: "Star Wars III", subtitle: "La Revanche des Sith", realeaseDate: 2005, duration: 140, categories: [Category.SF], synopsis: "En 19 av. BY, les Jedi Obi-Wan Kenobi et Anakin Skywalker sont chargés de retrouver le mystérieux Sith Dark Sidious, qui aurait infiltré depuis de nombreuses années le Sénat galactique. Ils parviennent à remonter sa trace jusqu’à son quartier général dans une zone désaffectée de Coruscant. Ils n’arrivent cependant pas à mettre la main sur lui. Dans le même temps, le général Grievous, chef de l’armée séparatiste attaque la planète capitale. Il parvient à capturer Palpatine, le Chancelier suprême de la République et le ramène jusqu’à son vaisseau spatial.",poster: nil , banner: bannerImg, trailerURL: trailerLink))
-        }
-        if let posterImg=UIImage(named:"SW1_Poster"), let bannerImg=UIImage(named:"SW1_Banner"), let trailerLink = URL(string:"https://youtu.be/bD7bpG-zDJQ") {
-            movies.append(Movie(title: "Star Wars I", subtitle: "La Menace fantôme", realeaseDate: 1999, duration: 136, categories: [Category.Aventure,Category.Fantastique], synopsis: "En 33 av. BY, une nouvelle crise menace la stabilité de ce régime politique.\n Depuis quelques années, une organisation montante, la Fédération du commerce détient le quasi monopole des échanges commerciaux dans la région de la Bordure extérieure. Sur le conseil de l'ambitieux sénateur Palpatine de la planète Naboo, le chef d'État de la République, le Chancelier Suprême Finis Valorum décide donc de taxer les transactions commerciales pour affaiblir le monopole de la Fédération. Prétextant que leurs vaisseaux commerciaux se font régulièrement attaquer par des pirates, les dirigeants de la Fédération demandent alors au chancelier l'autorisation de créer une armée de droïdes pour protéger ses transports. \n Quelques mois plus tard, en 32 av. BY, la situation se dégrade encore. Plusieurs membres du directoire de la Fédération du commerce sont assassinés. L'ambitieux Nute Gunray est alors nommé vice-roi de la Fédération. Conseillé par un homme mystérieux nommé Sidious, il décide alors d'organiser un embargo sur la planète de Naboo pour se venger du sénateur Palpatine, l'instigateur de la taxe commerciale",poster: posterImg , banner: bannerImg, trailerURL: trailerLink))
-        }
-        if let posterImg=UIImage(named:"SW2_Poster"), let bannerImg=UIImage(named:"SW2_Banner"), let trailerLink = URL(string:"https://youtu.be/gYbW1F_c9eM") {
-            movies.append(Movie(title: "Star Wars II", subtitle: "L'Attaque des clones", realeaseDate: 2002, duration: 142, categories: [Category.SF], synopsis: "Pour amener la paix, une République galactique a été fondée, avec pour capitale la planète Coruscant. Mais, tout au long de son existence, la République est secouée par des sécessions et des guerres. Ce fut le cas en 32 av. BY lors des événements narrés dans le film La Menace fantôme. Dix ans plus tard, en 22 av. BY, la République est une nouvelle fois menacée.Menés par l'ancien Jedi Dooku, des milliers de systèmes solaires menacent de faire sécession. Les chevaliers Jedi s'avèrent alors trop peu nombreux pour assurer le maintien de la paix dans l'ensemble de la galaxie. Sur la planète Ansion, le Jedi Obi-Wan Kenobi et son apprenti Anakin Skywalker parviennent à convaincre les autorités locales de ne pas quitter la République. Mais, à Coruscant, de nombreux sénateurs souhaitent qu'une armée soit mise sur pied au cas où une guerre de sécession éclaterait.",poster: posterImg , banner: bannerImg, trailerURL: trailerLink))
-        }
-        if let posterImg=UIImage(named:"SW3_Poster"), let bannerImg=UIImage(named:"SW3_Banner"), let trailerLink = URL(string:"https://youtu.be/5UnjrG_N8hU") {
-            movies.append(Movie(title: "Star Wars III", subtitle: "La Revanche des Sith", realeaseDate: 2005, duration: 140, categories: [Category.SF], synopsis: "En 19 av. BY, les Jedi Obi-Wan Kenobi et Anakin Skywalker sont chargés de retrouver le mystérieux Sith Dark Sidious, qui aurait infiltré depuis de nombreuses années le Sénat galactique. Ils parviennent à remonter sa trace jusqu’à son quartier général dans une zone désaffectée de Coruscant. Ils n’arrivent cependant pas à mettre la main sur lui. Dans le même temps, le général Grievous, chef de l’armée séparatiste attaque la planète capitale. Il parvient à capturer Palpatine, le Chancelier suprême de la République et le ramène jusqu’à son vaisseau spatial.",poster: nil , banner: bannerImg, trailerURL: trailerLink))
-        }
-        if let posterImg=UIImage(named:"SW1_Poster"), let bannerImg=UIImage(named:"SW1_Banner"), let trailerLink = URL(string:"https://youtu.be/bD7bpG-zDJQ") {
-            movies.append(Movie(title: "Star Wars I", subtitle: "La Menace fantôme", realeaseDate: 1999, duration: 136, categories: [Category.Aventure,Category.Fantastique], synopsis: "En 33 av. BY, une nouvelle crise menace la stabilité de ce régime politique.\n Depuis quelques années, une organisation montante, la Fédération du commerce détient le quasi monopole des échanges commerciaux dans la région de la Bordure extérieure. Sur le conseil de l'ambitieux sénateur Palpatine de la planète Naboo, le chef d'État de la République, le Chancelier Suprême Finis Valorum décide donc de taxer les transactions commerciales pour affaiblir le monopole de la Fédération. Prétextant que leurs vaisseaux commerciaux se font régulièrement attaquer par des pirates, les dirigeants de la Fédération demandent alors au chancelier l'autorisation de créer une armée de droïdes pour protéger ses transports. \n Quelques mois plus tard, en 32 av. BY, la situation se dégrade encore. Plusieurs membres du directoire de la Fédération du commerce sont assassinés. L'ambitieux Nute Gunray est alors nommé vice-roi de la Fédération. Conseillé par un homme mystérieux nommé Sidious, il décide alors d'organiser un embargo sur la planète de Naboo pour se venger du sénateur Palpatine, l'instigateur de la taxe commerciale",poster: posterImg , banner: bannerImg, trailerURL: trailerLink))
-        }
-        if let posterImg=UIImage(named:"SW2_Poster"), let bannerImg=UIImage(named:"SW2_Banner"), let trailerLink = URL(string:"https://youtu.be/gYbW1F_c9eM") {
-            movies.append(Movie(title: "Star Wars II", subtitle: "L'Attaque des clones", realeaseDate: 2002, duration: 142, categories: [Category.SF], synopsis: "Pour amener la paix, une République galactique a été fondée, avec pour capitale la planète Coruscant. Mais, tout au long de son existence, la République est secouée par des sécessions et des guerres. Ce fut le cas en 32 av. BY lors des événements narrés dans le film La Menace fantôme. Dix ans plus tard, en 22 av. BY, la République est une nouvelle fois menacée.Menés par l'ancien Jedi Dooku, des milliers de systèmes solaires menacent de faire sécession. Les chevaliers Jedi s'avèrent alors trop peu nombreux pour assurer le maintien de la paix dans l'ensemble de la galaxie. Sur la planète Ansion, le Jedi Obi-Wan Kenobi et son apprenti Anakin Skywalker parviennent à convaincre les autorités locales de ne pas quitter la République. Mais, à Coruscant, de nombreux sénateurs souhaitent qu'une armée soit mise sur pied au cas où une guerre de sécession éclaterait.",poster: posterImg , banner: bannerImg, trailerURL: trailerLink))
-        }
-        if let posterImg=UIImage(named:"SW3_Poster"), let bannerImg=UIImage(named:"SW3_Banner"), let trailerLink = URL(string:"https://youtu.be/5UnjrG_N8hU") {
-            movies.append(Movie(title: "Star Wars III", subtitle: "La Revanche des Sith", realeaseDate: 2005, duration: 140, categories: [Category.SF], synopsis: "En 19 av. BY, les Jedi Obi-Wan Kenobi et Anakin Skywalker sont chargés de retrouver le mystérieux Sith Dark Sidious, qui aurait infiltré depuis de nombreuses années le Sénat galactique. Ils parviennent à remonter sa trace jusqu’à son quartier général dans une zone désaffectée de Coruscant. Ils n’arrivent cependant pas à mettre la main sur lui. Dans le même temps, le général Grievous, chef de l’armée séparatiste attaque la planète capitale. Il parvient à capturer Palpatine, le Chancelier suprême de la République et le ramène jusqu’à son vaisseau spatial.",poster: nil , banner: bannerImg, trailerURL: trailerLink))
-        }
-        if let posterImg=UIImage(named:"SW2_Poster"), let bannerImg=UIImage(named:"SW2_Banner"), let trailerLink = URL(string:"https://youtu.be/gYbW1F_c9eM") {
-            movies.append(Movie(title: "Star Wars II", subtitle: "L'Attaque des clones", realeaseDate: 2002, duration: 142, categories: [Category.SF], synopsis: "Pour amener la paix, une République galactique a été fondée, avec pour capitale la planète Coruscant. Mais, tout au long de son existence, la République est secouée par des sécessions et des guerres. Ce fut le cas en 32 av. BY lors des événements narrés dans le film La Menace fantôme. Dix ans plus tard, en 22 av. BY, la République est une nouvelle fois menacée.Menés par l'ancien Jedi Dooku, des milliers de systèmes solaires menacent de faire sécession. Les chevaliers Jedi s'avèrent alors trop peu nombreux pour assurer le maintien de la paix dans l'ensemble de la galaxie. Sur la planète Ansion, le Jedi Obi-Wan Kenobi et son apprenti Anakin Skywalker parviennent à convaincre les autorités locales de ne pas quitter la République. Mais, à Coruscant, de nombreux sénateurs souhaitent qu'une armée soit mise sur pied au cas où une guerre de sécession éclaterait.",poster: posterImg , banner: bannerImg, trailerURL: trailerLink))
-        }
-        if let posterImg=UIImage(named:"SW3_Poster"), let bannerImg=UIImage(named:"SW3_Banner"), let trailerLink = URL(string:"https://youtu.be/5UnjrG_N8hU") {
-            movies.append(Movie(title: "Star Wars III", subtitle: "La Revanche des Sith", realeaseDate: 2005, duration: 140, categories: [Category.SF], synopsis: "En 19 av. BY, les Jedi Obi-Wan Kenobi et Anakin Skywalker sont chargés de retrouver le mystérieux Sith Dark Sidious, qui aurait infiltré depuis de nombreuses années le Sénat galactique. Ils parviennent à remonter sa trace jusqu’à son quartier général dans une zone désaffectée de Coruscant. Ils n’arrivent cependant pas à mettre la main sur lui. Dans le même temps, le général Grievous, chef de l’armée séparatiste attaque la planète capitale. Il parvient à capturer Palpatine, le Chancelier suprême de la République et le ramène jusqu’à son vaisseau spatial.",poster: nil , banner: bannerImg, trailerURL: trailerLink))
-        }
-        if let posterImg=UIImage(named:"SW1_Poster"), let bannerImg=UIImage(named:"SW1_Banner"), let trailerLink = URL(string:"https://youtu.be/bD7bpG-zDJQ") {
-            movies.append(Movie(title: "Star Wars I", subtitle: "La Menace fantôme", realeaseDate: 1999, duration: 136, categories: [Category.Aventure,Category.Fantastique], synopsis: "En 33 av. BY, une nouvelle crise menace la stabilité de ce régime politique.\n Depuis quelques années, une organisation montante, la Fédération du commerce détient le quasi monopole des échanges commerciaux dans la région de la Bordure extérieure. Sur le conseil de l'ambitieux sénateur Palpatine de la planète Naboo, le chef d'État de la République, le Chancelier Suprême Finis Valorum décide donc de taxer les transactions commerciales pour affaiblir le monopole de la Fédération. Prétextant que leurs vaisseaux commerciaux se font régulièrement attaquer par des pirates, les dirigeants de la Fédération demandent alors au chancelier l'autorisation de créer une armée de droïdes pour protéger ses transports. \n Quelques mois plus tard, en 32 av. BY, la situation se dégrade encore. Plusieurs membres du directoire de la Fédération du commerce sont assassinés. L'ambitieux Nute Gunray est alors nommé vice-roi de la Fédération. Conseillé par un homme mystérieux nommé Sidious, il décide alors d'organiser un embargo sur la planète de Naboo pour se venger du sénateur Palpatine, l'instigateur de la taxe commerciale",poster: posterImg , banner: bannerImg, trailerURL: trailerLink))
-        }
-        if let posterImg=UIImage(named:"SW2_Poster"), let bannerImg=UIImage(named:"SW2_Banner"), let trailerLink = URL(string:"https://youtu.be/gYbW1F_c9eM") {
-            movies.append(Movie(title: "Star Wars II", subtitle: "L'Attaque des clones", realeaseDate: 2002, duration: 142, categories: [Category.SF], synopsis: "Pour amener la paix, une République galactique a été fondée, avec pour capitale la planète Coruscant. Mais, tout au long de son existence, la République est secouée par des sécessions et des guerres. Ce fut le cas en 32 av. BY lors des événements narrés dans le film La Menace fantôme. Dix ans plus tard, en 22 av. BY, la République est une nouvelle fois menacée.Menés par l'ancien Jedi Dooku, des milliers de systèmes solaires menacent de faire sécession. Les chevaliers Jedi s'avèrent alors trop peu nombreux pour assurer le maintien de la paix dans l'ensemble de la galaxie. Sur la planète Ansion, le Jedi Obi-Wan Kenobi et son apprenti Anakin Skywalker parviennent à convaincre les autorités locales de ne pas quitter la République. Mais, à Coruscant, de nombreux sénateurs souhaitent qu'une armée soit mise sur pied au cas où une guerre de sécession éclaterait.",poster: posterImg , banner: bannerImg, trailerURL: trailerLink))
-        }
-        if let posterImg=UIImage(named:"SW3_Poster"), let bannerImg=UIImage(named:"SW3_Banner"), let trailerLink = URL(string:"https://youtu.be/5UnjrG_N8hU") {
-            movies.append(Movie(title: "Star Wars III", subtitle: "La Revanche des Sith", realeaseDate: 2005, duration: 140, categories: [Category.SF], synopsis: "En 19 av. BY, les Jedi Obi-Wan Kenobi et Anakin Skywalker sont chargés de retrouver le mystérieux Sith Dark Sidious, qui aurait infiltré depuis de nombreuses années le Sénat galactique. Ils parviennent à remonter sa trace jusqu’à son quartier général dans une zone désaffectée de Coruscant. Ils n’arrivent cependant pas à mettre la main sur lui. Dans le même temps, le général Grievous, chef de l’armée séparatiste attaque la planète capitale. Il parvient à capturer Palpatine, le Chancelier suprême de la République et le ramène jusqu’à son vaisseau spatial.",poster: nil , banner: bannerImg, trailerURL: trailerLink))
-        }
+            
+        
+            
+        
+        
+        
         tableView.delegate=self
         tableView.dataSource=self
         
@@ -87,22 +85,33 @@ class MovieListViewController:/*UINavigationController*/UIViewController, UITabl
         let movie = movies[indexPath.row]
         cell.firstLb.text=movie.title
         cell.secondLb.text=movie.subtitle
-        cell.poster.image=movie.poster
+        //cell.poster.image=movie.poster
         cell.synopsis.text=movie.synopsis
-        cell.releaseDate.text=String(movie.realeaseDate)
+        cell.releaseDate.text=String(movie.releaseDate)
+        if let poster = movie.poster{
+            APIService.imageRequest(type: imageType.poster, path: poster){img in
+                if let image = img {
+                    DispatchQueue.main.async() {//queue the image update on the main thread
+                        cell.poster.image=image
+                    }
+                }
+            }
+        }
         
         return cell
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath){
-        print(movies[indexPath.row].title)
-        
+        selectedMovie=movies[indexPath.row]
         self.performSegue(withIdentifier: "openDetail", sender: nil)
     }
     
-    /*override func prepare(for segue: UIStoryboardSegue, sender: Any?){
-        if segue.identifier==openDetail
-    }*/
-    
-    
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?){
+        if segue.identifier=="openDetail"{
+            if let destinationVC  = segue.destination as? ViewController{
+                //destinationVC.currentMovie = selectedMovie
+                destinationVC.movieId=selectedMovie?.id
+            }
+        }
+    }
 }

@@ -8,7 +8,7 @@
          BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
          <BreakpointContent
             uuid = "67EDD0C2-DA31-4292-95C9-3908AEE80947"
-            shouldBeEnabled = "Yes"
+            shouldBeEnabled = "No"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "ProjectDim/ViewController.swift"
@@ -18,6 +18,99 @@
             endingLineNumber = "9"
             landmarkName = "unknown"
             landmarkType = "0">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "7CF8BD33-DF91-47B7-87F1-A65FEBD46FB9"
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "ProjectDim/ViewController.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "10"
+            endingLineNumber = "10"
+            landmarkName = "unknown"
+            landmarkType = "0">
+            <Locations>
+               <Location
+                  uuid = "7CF8BD33-DF91-47B7-87F1-A65FEBD46FB9 - 87fb4473e0ca9b8d"
+                  shouldBeEnabled = "No"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "ProjectDim.ViewController.__allocating_init(nibName: Swift.Optional&lt;Swift.String&gt;, bundle: Swift.Optional&lt;__C.NSBundle&gt;) -&gt; ProjectDim.ViewController"
+                  moduleName = "ProjectDim"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/digital/Documents/Swift/Project/ProjectDim/ProjectDim/ViewController.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "0"
+                  endingLineNumber = "0"
+                  offsetFromSymbolStart = "12">
+               </Location>
+               <Location
+                  uuid = "7CF8BD33-DF91-47B7-87F1-A65FEBD46FB9 - ad03713c427f48f6"
+                  shouldBeEnabled = "No"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "ProjectDim.ViewController.init(nibName: Swift.Optional&lt;Swift.String&gt;, bundle: Swift.Optional&lt;__C.NSBundle&gt;) -&gt; ProjectDim.ViewController"
+                  moduleName = "ProjectDim"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/digital/Documents/Swift/Project/ProjectDim/ProjectDim/ViewController.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "13"
+                  endingLineNumber = "13"
+                  offsetFromSymbolStart = "182">
+               </Location>
+               <Location
+                  uuid = "7CF8BD33-DF91-47B7-87F1-A65FEBD46FB9 - b59db151a7d800de"
+                  shouldBeEnabled = "No"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "ProjectDim.ViewController.__allocating_init(coder: __C.NSCoder) -&gt; Swift.Optional&lt;ProjectDim.ViewController&gt;"
+                  moduleName = "ProjectDim"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/digital/Documents/Swift/Project/ProjectDim/ProjectDim/ViewController.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "0"
+                  endingLineNumber = "0"
+                  offsetFromSymbolStart = "12">
+               </Location>
+               <Location
+                  uuid = "7CF8BD33-DF91-47B7-87F1-A65FEBD46FB9 - 42068001b5086a69"
+                  shouldBeEnabled = "No"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "ProjectDim.ViewController.init(coder: __C.NSCoder) -&gt; Swift.Optional&lt;ProjectDim.ViewController&gt;"
+                  moduleName = "ProjectDim"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/digital/Documents/Swift/Project/ProjectDim/ProjectDim/ViewController.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "13"
+                  endingLineNumber = "13"
+                  offsetFromSymbolStart = "119">
+               </Location>
+               <Location
+                  uuid = "7CF8BD33-DF91-47B7-87F1-A65FEBD46FB9 - e9292c62f71b4dcd"
+                  shouldBeEnabled = "No"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "ProjectDim.ViewController.__deallocating_deinit"
+                  moduleName = "ProjectDim"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/digital/Documents/Swift/Project/ProjectDim/ProjectDim/ViewController.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "0"
+                  endingLineNumber = "0"
+                  offsetFromSymbolStart = "16">
+               </Location>
+            </Locations>
          </BreakpointContent>
       </BreakpointProxy>
    </Breakpoints>
