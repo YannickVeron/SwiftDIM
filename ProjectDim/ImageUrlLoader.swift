@@ -22,32 +22,3 @@ extension UIImageView {
         }
     }
 }
-
-
-/*
- if let data = data{
-    let sData = String(decoding:data, as : UTF8.self)
-    print(sData)
- }
- 
- 
- codable
- let json = "{\"id\":28,\"name\":\"Action\"}"
- let data = Data(json.utf8)//auto
- JSONDecoder().decode(Genre.self, from: data)
- */
-
-//MARK:- URLSessio + Codable
-/*let url = URL(string:"someURL")!
-URLSession.shared.dataTask(with: url){(data,response,error) in
-    guard error==nil else {
-        //TODO : handle error
-        return
-    }
-    if let data=data{
-        let genre = try? JSONDecoder().decode(Genre.self, from: data)
-        print(genre?.name)
-    }
-    return
-}.resume()
-*/
