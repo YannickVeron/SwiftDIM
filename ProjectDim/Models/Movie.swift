@@ -65,14 +65,16 @@ struct Movie {
         }
         dateFormater.dateFormat="yyyy"
         title=responseTitle
-        subtitle=""
+        subtitle=response.tagline ?? ""
         releaseDate=Int(dateFormater.string(from: date))! //TODO : remove force cast
         duration=responseRuntime
         synopsis=responseOverview
         poster=responsePoster
         banner=responseBackdrop
         id=responseId
-        genres=responseGenres
+        genres=responseGenres.compactMap({(genreResponse) -> Genre? in
+            return Genre(response: genreResponse)
+        })
     }
     
     func humanReadableDuration()-> String{//function
@@ -85,9 +87,7 @@ struct Movie {
     var categoriesString : String{//Computed Property - cannot be let
         if let genres = genres{
             return genres.map({(genre) -> String in
-                if let name = genre.name{
-                    return name
-                }else{return ""}
+                return genre.name
                 }).joined(separator: "/")
         }
         return ""

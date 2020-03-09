@@ -13,10 +13,17 @@ class APIService {
     static let API_KEY:String = "bc1c540985c64209509d0beaecc09fa5"
     static let base_url:String = "https://api.themoviedb.org/3"
     static let img_base_url:String = "https://image.tmdb.org/t/p/"
+    static let language:String = "fr-FR"
     //static let stringUrl = base_url+"/movie/550?api_key="+API_KEY
     
-    static func discoverRequest(page :Int=1, completionHandler: @escaping (_ moviesResponse:MoviesResponse)->Void){
-        if let url = URL(string: "\(base_url)/discover/movie?language=fr-FR&sort_by=popularity.desc&include_adult=false&include_video=false&page=\(page)&api_key=\(API_KEY)"){
+    static func discoverRequest(page :Int=1,genres:[Int]?=nil, completionHandler: @escaping (_ moviesResponse:MoviesResponse)->Void){
+        var urlStr = "\(base_url)/discover/movie?language=fr-FR&sort_by=popularity.desc&include_adult=false&include_video=false&page=\(page)"
+        if let genresList = genres {
+            urlStr+="&with_genres=\(genresList.map{String($0)}.joined(separator:","))"
+        }
+        urlStr+="&api_key=\(API_KEY)"
+        
+        if let url = URL(string:urlStr){
             URLSession.shared.dataTask(with: url){(data,response,error) in
                 guard error==nil else {
                     //TODO : handle error
@@ -27,6 +34,7 @@ class APIService {
                     decoder.keyDecodingStrategy = .convertFromSnakeCase
                     let moviesResponse:MoviesResponse? = try? decoder.decode(MoviesResponse.self, from: data)
                     if let moviesResponse = moviesResponse{
+                        print(urlStr)
                         completionHandler(moviesResponse)
                     }
                 }
@@ -56,7 +64,7 @@ class APIService {
     }
     
     static func movieDetailRequest(movieId:Int, completionHandler:@escaping (_ movieDetailResponse:MovieDetailResponse?)->Void){
-        if let url = URL(string:"\(self.base_url)/movie/\(movieId)?language=fr-FR&api_key=\(self.API_KEY)"){
+        if let url = URL(string:"\(self.base_url)/movie/\(movieId)?language=\(language)&api_key=\(self.API_KEY)"){
             URLSession.shared.dataTask(with:url){(data,response,error) in
                 guard error==nil else {
                     //TODO : handle error
@@ -88,6 +96,25 @@ class APIService {
                     let movieVideosResponse:MovieVideosResponse?=try? decoder.decode(MovieVideosResponse.self, from: data)
                     if let movieVideosResponse = movieVideosResponse{
                         completionHandler(movieVideosResponse)
+                    }
+                }
+            }.resume()
+        }
+    }
+    
+    static func genresRequest(completionHandler: @escaping (_ genresResponse:GenresResponse)->Void){
+        if let url = URL(string: "\(self.base_url)/genre/movie/list?api_key=\(self.API_KEY)&language=\(language)"){
+            URLSession.shared.dataTask(with: url){(data,response,error) in
+                guard error==nil else{
+                    //TODO Handle error
+                    return
+                }
+                if let data=data{
+                    let decoder = JSONDecoder()
+                    decoder.keyDecodingStrategy = .convertFromSnakeCase
+                    let genresResponse:GenresResponse?=try? decoder.decode(GenresResponse.self, from: data)
+                    if let genresResponse = genresResponse{
+                        completionHandler(genresResponse)
                     }
                 }
             }.resume()

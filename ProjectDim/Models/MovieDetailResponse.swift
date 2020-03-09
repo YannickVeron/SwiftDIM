@@ -13,7 +13,7 @@ struct MovieDetailResponse : Decodable{
     var backdropPath : String?
     //var belongs_to_collection : //obj?,
     var budget : Int?
-    var genres : [Genre]?
+    var genres : [GenreResponse]?
     var homepage: String?
     var id: Int?
     var imdbId: String?

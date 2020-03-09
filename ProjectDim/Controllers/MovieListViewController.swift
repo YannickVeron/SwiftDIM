@@ -13,21 +13,37 @@ class MovieListViewController:UIViewController, UITableViewDelegate,UITableViewD
     @IBOutlet weak var tableView: UITableView!
     let cellID="MovieCellID"
     let detailVCID="openDetail"
+    var genreId : Int?
     var movies : [Movie] = []
     var selectedMovie : Movie?
     var imagesDict : [String:UIImage] = [:]
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        APIService.discoverRequest(){moviesResponse in
-            if let results = moviesResponse.results{
-                for response:MovieResponse in results{
-                    if let movie = Movie(response: response){
-                        self.movies.append(movie)
+        if let genreId = genreId{
+            APIService.discoverRequest(genres:[genreId]){moviesResponse in
+                if let results = moviesResponse.results{
+                    for response:MovieResponse in results{
+                        if let movie = Movie(response: response){
+                            self.movies.append(movie)
+                        }
+                    }
+                    DispatchQueue.main.async() {//queue the image update on the main thread
+                        self.tableView.reloadData()
                     }
                 }
-                DispatchQueue.main.async() {//queue the image update on the main thread
-                    self.tableView.reloadData()
+            }
+        }else{
+            APIService.discoverRequest(){moviesResponse in
+                if let results = moviesResponse.results{
+                    for response:MovieResponse in results{
+                        if let movie = Movie(response: response){
+                            self.movies.append(movie)
+                        }
+                    }
+                    DispatchQueue.main.async() {//queue the image update on the main thread
+                        self.tableView.reloadData()
+                    }
                 }
             }
         }

@@ -52,7 +52,7 @@ class ViewController: UIViewController {
                 self.loadImage(type: imageType.poster, path: posterPath)
             }
             if let bannerPath = movie.banner{
-                self.loadImage(type: imageType.backdrop, path: bannerPath)
+                self.loadImage(type: imageType.backdrop, path: bannerPath,text:self.synopsis)
             }
             self.currentMovie=movie
             DispatchQueue.main.async() {//queue the update on the main thread
@@ -65,13 +65,20 @@ class ViewController: UIViewController {
             }
         }
     }
-    func loadImage(type: imageType, path:String){
+    func loadImage(type: imageType, path:String,text:UITextView?=nil){
         let imageViews : [imageType:UIImageView] = [imageType.backdrop:self.banner,imageType.poster:self.poster]
         APIService.imageRequest(type: type, path: path){img in
             if let image = img {
                 DispatchQueue.main.async() {//queue the image update on the main thread
                     if let imageView = imageViews[type]{
                         imageView.image=image
+                        //print(image.averageColor)
+                        if type==imageType.backdrop{
+                            imageView.backgroundColor=image.averageColor(areaSize: 0.1)
+                        }
+                        if let lbl = text{
+                            lbl.textColor=image.averageColor()
+                        }
                     }
                 }
             }
