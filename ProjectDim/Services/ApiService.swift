@@ -17,7 +17,7 @@ class APIService {
     //static let stringUrl = base_url+"/movie/550?api_key="+API_KEY
     
     static func discoverRequest(page :Int=1,genres:[Int]?=nil, completionHandler: @escaping (_ moviesResponse:MoviesResponse)->Void){
-        var urlStr = "\(base_url)/discover/movie?language=fr-FR&sort_by=popularity.desc&include_adult=false&include_video=false&page=\(page)"
+        var urlStr = "\(base_url)/discover/movie?language=\(language)&sort_by=popularity.desc&include_adult=false&include_video=false&page=\(page)"
         if let genresList = genres {
             urlStr+="&with_genres=\(genresList.map{String($0)}.joined(separator:","))"
         }
@@ -34,7 +34,6 @@ class APIService {
                     decoder.keyDecodingStrategy = .convertFromSnakeCase
                     let moviesResponse:MoviesResponse? = try? decoder.decode(MoviesResponse.self, from: data)
                     if let moviesResponse = moviesResponse{
-                        print(urlStr)
                         completionHandler(moviesResponse)
                     }
                 }

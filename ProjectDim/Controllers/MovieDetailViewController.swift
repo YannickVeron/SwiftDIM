@@ -8,7 +8,7 @@
 
 import UIKit
 
-class ViewController: UIViewController {
+class MovieDetailViewController: UIViewController {
     
     @IBOutlet weak var movieTitle: UILabel!
     @IBOutlet weak var movieSubTitle: UILabel!
@@ -18,15 +18,24 @@ class ViewController: UIViewController {
     @IBOutlet weak var duration: UILabel!
     @IBOutlet weak var categories: UILabel!
     @IBOutlet weak var synopsis: UITextView!
+    @IBOutlet weak var containerView: UIView!
+    @IBOutlet weak var scrollView: UIScrollView!
+    @IBOutlet weak var playButton: UIButton!
+    
+    @IBOutlet weak var releaseDateLbl: UILabel!
+    @IBOutlet weak var durationLbl: UILabel!
+    @IBOutlet weak var synopsisLbl: UILabel!
     
     var movieId : Int!
     var currentMovie : Movie?
+    var textContainers : [UIView]?
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        
+        textContainers = [self.movieTitle,self.movieSubTitle,self.releaseDate,self.duration,self.categories,self.synopsis,self.containerView,self.releaseDateLbl,self.durationLbl,self.synopsisLbl,self.scrollView,self.playButton]
         loadDetail()
     }
+    
     @IBAction func playTrailer(_ sender: Any) {
         APIService.videosRequest(movieId: movieId){movieVideosResponse in
             guard let response = movieVideosResponse, let videos = response.results else{
@@ -48,7 +57,7 @@ class ViewController: UIViewController {
             guard let result = movieDetailResponse, let movie = Movie(response: result) else {
                 return
             }
-            if let posterPath = movie.poster{//to function
+            if let posterPath = movie.poster{
                 self.loadImage(type: imageType.poster, path: posterPath)
             }
             if let bannerPath = movie.banner{
@@ -68,16 +77,24 @@ class ViewController: UIViewController {
     func loadImage(type: imageType, path:String,text:UITextView?=nil){
         let imageViews : [imageType:UIImageView] = [imageType.backdrop:self.banner,imageType.poster:self.poster]
         APIService.imageRequest(type: type, path: path){img in
-            if let image = img {
-                DispatchQueue.main.async() {//queue the image update on the main thread
-                    if let imageView = imageViews[type]{
-                        imageView.image=image
-                        //print(image.averageColor)
-                        if type==imageType.backdrop{
-                            imageView.backgroundColor=image.averageColor(areaSize: 0.1)
-                        }
-                        if let lbl = text{
-                            lbl.textColor=image.averageColor()
+            guard let image = img, let imageView = imageViews[type] else {
+                return
+            }
+            DispatchQueue.main.async() {//queue the image update on the main thread
+                imageView.image=image
+                if type==imageType.backdrop, let avgColor = image.averageColor(areaSize: 0.1), let textContainers = self.textContainers{
+                    imageView.backgroundColor=avgColor
+                    let bgColor = avgColor.contrastColor()
+                    for view: UIView in textContainers{
+                        if let lbl = view as? UILabel{
+                            lbl.textColor=avgColor
+                        }else if let txtView = view as? UITextView{
+                            txtView.textColor=avgColor
+                        }else if let btn = view as? UIButton{
+                            btn.backgroundColor = avgColor
+                            btn.setTitleColor(bgColor, for: UIControl.State.normal)
+                        }else{
+                            view.backgroundColor=bgColor
                         }
                     }
                 }

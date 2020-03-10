@@ -17,42 +17,15 @@ class MovieListViewController:UIViewController, UITableViewDelegate,UITableViewD
     var movies : [Movie] = []
     var selectedMovie : Movie?
     var imagesDict : [String:UIImage] = [:]
+    var page : (current:Int,total:Int) = (current:1,total:1)
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        if let genreId = genreId{
-            APIService.discoverRequest(genres:[genreId]){moviesResponse in
-                if let results = moviesResponse.results{
-                    for response:MovieResponse in results{
-                        if let movie = Movie(response: response){
-                            self.movies.append(movie)
-                        }
-                    }
-                    DispatchQueue.main.async() {//queue the image update on the main thread
-                        self.tableView.reloadData()
-                    }
-                }
-            }
-        }else{
-            APIService.discoverRequest(){moviesResponse in
-                if let results = moviesResponse.results{
-                    for response:MovieResponse in results{
-                        if let movie = Movie(response: response){
-                            self.movies.append(movie)
-                        }
-                    }
-                    DispatchQueue.main.async() {//queue the image update on the main thread
-                        self.tableView.reloadData()
-                    }
-                }
-            }
-        }
+        loadMovies(page:page.current,genres: [genreId])
             
         tableView.delegate=self
         tableView.dataSource=self
-        
         tableView.register(UINib(nibName: "MovieTableViewCell", bundle: nil), forCellReuseIdentifier: cellID)
-        
         tableView.reloadData()
     }
 
@@ -61,6 +34,11 @@ class MovieListViewController:UIViewController, UITableViewDelegate,UITableViewD
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        let loadingOffset = 2//load next batch of movie before user reach bottom
+        if indexPath.row>(movies.count-1)-loadingOffset && page.current<page.total{
+            page.current+=1
+            loadMovies(page:page.current,genres: [genreId])
+        }
         let cell = tableView.dequeueReusableCell(withIdentifier: cellID, for: indexPath) as! MovieTableViewCell
         let movie = movies[indexPath.row]
         cell.firstLb.text=movie.title
@@ -79,7 +57,7 @@ class MovieListViewController:UIViewController, UITableViewDelegate,UITableViewD
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?){
         if segue.identifier==detailVCID{
-            if let destinationVC = segue.destination as? ViewController,let id = sender as? Int{
+            if let destinationVC = segue.destination as? MovieDetailViewController,let id = sender as? Int{
                 destinationVC.movieId=id
             }
         }
@@ -99,6 +77,25 @@ class MovieListViewController:UIViewController, UITableViewDelegate,UITableViewD
             }else{
                 if let image = self.imagesDict[posterURL]{
                     cell.poster.image=image
+                }
+            }
+        }
+    }
+    
+    func loadMovies(page: Int=1,genres:[Int?]){
+        let genreClean = genres.compactMap { $0 }
+        APIService.discoverRequest(page:page, genres:genreClean){moviesResponse in
+            if let totalPages = moviesResponse.totalPages{
+                self.page.total=totalPages
+            }
+            if let results = moviesResponse.results{
+                for response:MovieResponse in results{
+                    if let movie = Movie(response: response){
+                        self.movies.append(movie)
+                    }
+                }
+                DispatchQueue.main.async() {//queue the movies update on the main thread
+                    self.tableView.reloadData()
                 }
             }
         }

@@ -19,7 +19,6 @@ class GenreListViewController:UIViewController, UICollectionViewDataSource, UICo
     
     override func viewDidLoad() {
         genreCollectionView.register(UINib(nibName: "GenreCollectionViewCell", bundle: nil),forCellWithReuseIdentifier: cellID)
-        genreCollectionView.reloadData()
         
         APIService.genresRequest(){genresResponse in
             if let genres = genresResponse.genres{
@@ -43,7 +42,6 @@ class GenreListViewController:UIViewController, UICollectionViewDataSource, UICo
         // subtract section left/ right insets mentioned in xib view
         let widthAvailbleForAllItems =  (collectionView.frame.width - flowLayout.sectionInset.left - flowLayout.sectionInset.right)
 
-        // Suppose we have to create nColunmns
         // widthForOneItem achieved by sunbtracting item spacing if any
         let widthForOneItem = widthAvailbleForAllItems / 2 - flowLayout.minimumInteritemSpacing/2
 

@@ -19,24 +19,13 @@ struct Movie {
     var title : String
     var subtitle : String
     var releaseDate : Int
-    var duration : Int //duration in minutes
+    var duration : Int? //duration in minutes
     var synopsis : String
     var poster : String?
     var banner : String?
     var trailerURL: URL?
     var id: Int?
     var genres: [Genre]?
-    
-    /*init(title: String, subtitle: String, realeaseDate: Int, duration: Int, categories: [Category], synopsis: String,poster: String? , banner: String, trailerURL: URL?){
-        self.title=title
-        self.subtitle=subtitle
-        self.releaseDate=realeaseDate
-        self.duration=duration
-        self.synopsis=synopsis
-        self.poster=poster
-        self.banner=banner
-        self.trailerURL=trailerURL
-    }*/
     
     init?(response : MovieResponse){
         let _url = URL(string: "https://youtu.be/bD7bpG-zDJQ")
@@ -60,15 +49,22 @@ struct Movie {
     init?(response : MovieDetailResponse){
         let dateFormater=DateFormatter()
         dateFormater.dateFormat = "yyyy-MM-dd"
-        guard let responseTitle = response.title,let responseOverview = response.overview,let dateString=response.releaseDate, let date=dateFormater.date(from: dateString), let responseId = response.id, let responsePoster=response.posterPath, let responseBackdrop=response.backdropPath, let responseRuntime = response.runtime, let responseGenres = response.genres else {
+        guard let responseTitle = response.title,let dateString=response.releaseDate, let date=dateFormater.date(from: dateString), let responseId = response.id, let responsePoster=response.posterPath, let responseBackdrop=response.backdropPath, let responseGenres = response.genres else {
+            
             return nil
         }
         dateFormater.dateFormat="yyyy"
         title=responseTitle
         subtitle=response.tagline ?? ""
         releaseDate=Int(dateFormater.string(from: date))! //TODO : remove force cast
-        duration=responseRuntime
-        synopsis=responseOverview
+        duration=response.runtime
+        
+        if !(response.overview ?? "").isEmpty, let synops = response.overview{
+            synopsis=synops
+        }else{
+            synopsis="Aucun synopsis"
+        }
+        
         poster=responsePoster
         banner=responseBackdrop
         id=responseId
@@ -78,6 +74,9 @@ struct Movie {
     }
     
     func humanReadableDuration()-> String{//function
+        guard let duration = duration else {
+            return ""
+        }
         if duration<60{
             return "\(duration) mn"
         }
