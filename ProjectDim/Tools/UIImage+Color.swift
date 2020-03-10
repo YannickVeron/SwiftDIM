@@ -18,8 +18,8 @@ extension UIImage {
         let bitmapColor = {(areaSize:Float, isRight:Bool)->[UInt8]? in
             var x = inputImage.extent.origin.x
             var z = inputImage.extent.size.width*CGFloat(areaSize)
-            if isRight{//if should select right side
-                x+=inputImage.extent.size.width-(inputImage.extent.size.width*CGFloat(areaSize))
+            if isRight{//if right side
+                x+=inputImage.extent.size.width-z
                 z=inputImage.extent.size.width
             }
             var colorBitmap = [UInt8](repeating: 0, count: 4)//create color bitmap
@@ -33,7 +33,7 @@ extension UIImage {
         if let bitmap = bitmapColor(areaSize,false){//get left side color average
             colors=bitmap
         }
-        if areaSize != 1{//if not whole image get left side color average
+        if areaSize != 1{//if not whole image get right side color average
             var colorsRight:[UInt8]=[]
             if let bitmap = bitmapColor(areaSize, true){
                 colorsRight=bitmap

@@ -19,17 +19,18 @@ class MovieListViewController:UIViewController, UITableViewDelegate,UITableViewD
     var movies : [Movie] = []
     var selectedMovie : Movie?
     var imagesDict : [String:UIImage] = [:]
-    var page : (current:Int,total:Int) = (current:1,total:1)
+    var pages : (current:Int,total:Int) = (current:1,total:1)
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        loadMovies(page:page.current,genres: [genre?.id])
+        
         genreLb.text=genre.name
-            
+        
         tableView.delegate=self
         tableView.dataSource=self
         tableView.register(UINib(nibName: "MovieTableViewCell", bundle: nil), forCellReuseIdentifier: cellID)
-        tableView.reloadData()
+        
+        loadMovies(page:pages.current,genres: [genre?.id])
     }
 
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
@@ -38,9 +39,9 @@ class MovieListViewController:UIViewController, UITableViewDelegate,UITableViewD
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let loadingOffset = 2//load next batch of movie before user reach bottom
-        if indexPath.row>(movies.count-1)-loadingOffset && page.current<page.total{
-            page.current+=1
-            loadMovies(page:page.current,genres: [genre?.id])
+        if indexPath.row>(movies.count-1)-loadingOffset && pages.current<pages.total{
+            pages.current+=1
+            loadMovies(page:pages.current,genres: [genre?.id])
         }
         let cell = tableView.dequeueReusableCell(withIdentifier: cellID, for: indexPath) as! MovieTableViewCell
         let movie = movies[indexPath.row]
@@ -90,7 +91,7 @@ class MovieListViewController:UIViewController, UITableViewDelegate,UITableViewD
         let genreClean = genres.compactMap { $0 }
         APIService.discoverRequest(page:page, genres:genreClean){moviesResponse in
             if let totalPages = moviesResponse.totalPages{
-                self.page.total=totalPages
+                self.pages.total=totalPages
             }
             if let results = moviesResponse.results{
                 for response:MovieResponse in results{
