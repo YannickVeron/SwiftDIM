@@ -15,18 +15,16 @@ extension UIColor {
     var blueValue: CGFloat{ return CIColor(color: self).blue }
     var alphaValue: CGFloat{ return CIColor(color: self).alpha }
     
-    func contrastColor()->UIColor
-    {
-        let color = self
-        //from https://stackoverflow.com/a/1855903
-        var d: Int = 0
-        // Counting the perceptive luminance - human eye favors green color...
-        let luminance:CGFloat = ( CGFloat(0.299) * color.redValue + CGFloat(0.587) * color.greenValue + CGFloat(0.114) * color.blueValue)
-        if luminance > 0.3{
-           d = 0; // bright colors - black background
+    func contrastColor()->UIColor{//get ideal background color of text
+        //modified version of https://stackoverflow.com/a/1855903
+        var d: CGFloat = 0
+        // Calculate relative luminance - human eye favors green color...
+        let luminance:CGFloat = ( CGFloat(0.2126) * self.redValue + CGFloat(0.7152) * self.greenValue + CGFloat(0.0722) * self.blueValue)
+        if luminance > 0.5{
+            d = 0.1; // bright colors - dark background
         }else{
-           d = 1; // dark colors - white background
+            d = 1; // dark colors - white background
         }
-        return  UIColor(red: CGFloat(d),green: CGFloat(d),blue: CGFloat(d),alpha: CGFloat(1))
+        return  UIColor(red: d,green: d,blue: d,alpha: CGFloat(1))
     }
 }

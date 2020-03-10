@@ -11,9 +11,11 @@ import UIKit
 class MovieListViewController:UIViewController, UITableViewDelegate,UITableViewDataSource {
     
     @IBOutlet weak var tableView: UITableView!
+    @IBOutlet weak var genreLb: UILabel!
+    
     let cellID="MovieCellID"
     let detailVCID="openDetail"
-    var genreId : Int?
+    var genre : Genre!
     var movies : [Movie] = []
     var selectedMovie : Movie?
     var imagesDict : [String:UIImage] = [:]
@@ -21,7 +23,8 @@ class MovieListViewController:UIViewController, UITableViewDelegate,UITableViewD
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        loadMovies(page:page.current,genres: [genreId])
+        loadMovies(page:page.current,genres: [genre?.id])
+        genreLb.text=genre.name
             
         tableView.delegate=self
         tableView.dataSource=self
@@ -37,7 +40,7 @@ class MovieListViewController:UIViewController, UITableViewDelegate,UITableViewD
         let loadingOffset = 2//load next batch of movie before user reach bottom
         if indexPath.row>(movies.count-1)-loadingOffset && page.current<page.total{
             page.current+=1
-            loadMovies(page:page.current,genres: [genreId])
+            loadMovies(page:page.current,genres: [genre?.id])
         }
         let cell = tableView.dequeueReusableCell(withIdentifier: cellID, for: indexPath) as! MovieTableViewCell
         let movie = movies[indexPath.row]
@@ -53,6 +56,9 @@ class MovieListViewController:UIViewController, UITableViewDelegate,UITableViewD
         if movies.count>indexPath.row, let id = movies[indexPath.row].id{
             self.performSegue(withIdentifier: detailVCID, sender: id)
         }
+    }
+    @IBAction func closeList(_ sender: Any) {
+        dismiss(animated: true, completion: nil)
     }
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?){
@@ -74,10 +80,8 @@ class MovieListViewController:UIViewController, UITableViewDelegate,UITableViewD
                         }
                     }
                 }
-            }else{
-                if let image = self.imagesDict[posterURL]{
-                    cell.poster.image=image
-                }
+            }else if let image = self.imagesDict[posterURL]{
+                cell.poster.image=image
             }
         }
     }

@@ -64,14 +64,14 @@ class GenreListViewController:UIViewController, UICollectionViewDataSource, UICo
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath){
         if genres.count>indexPath.row{
-            self.performSegue(withIdentifier: movieListVCID, sender: genres[indexPath.row].id)
+            self.performSegue(withIdentifier: movieListVCID, sender: genres[indexPath.row])
         }
     }
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?){
         if segue.identifier==movieListVCID{
-            if let destinationVC = segue.destination as? MovieListViewController,let id = sender as? Int{
-                destinationVC.genreId=id
+            if let destinationVC = segue.destination as? MovieListViewController,let genre = sender as? Genre{
+                destinationVC.genre=genre
             }
         }
     }

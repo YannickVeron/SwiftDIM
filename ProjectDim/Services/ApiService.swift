@@ -14,7 +14,6 @@ class APIService {
     static let base_url:String = "https://api.themoviedb.org/3"
     static let img_base_url:String = "https://image.tmdb.org/t/p/"
     static let language:String = "fr-FR"
-    //static let stringUrl = base_url+"/movie/550?api_key="+API_KEY
     
     static func discoverRequest(page :Int=1,genres:[Int]?=nil, completionHandler: @escaping (_ moviesResponse:MoviesResponse)->Void){
         var urlStr = "\(base_url)/discover/movie?language=\(language)&sort_by=popularity.desc&include_adult=false&include_video=false&page=\(page)"
@@ -32,7 +31,7 @@ class APIService {
                 if let data=data{
                     let decoder = JSONDecoder()
                     decoder.keyDecodingStrategy = .convertFromSnakeCase
-                    let moviesResponse:MoviesResponse? = try? decoder.decode(MoviesResponse.self, from: data)
+                    let moviesResponse:MoviesResponse? = try? decoder.decode(MoviesResponse.self, from: data)//Decode the response to a MovieResponse
                     if let moviesResponse = moviesResponse{
                         completionHandler(moviesResponse)
                     }

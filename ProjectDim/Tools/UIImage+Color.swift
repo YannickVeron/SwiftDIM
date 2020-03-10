@@ -11,7 +11,7 @@ import UIKit
 
 extension UIImage {
     //modified version of : https://www.hackingwithswift.com/example-code/media/how-to-read-the-average-color-of-a-uiimage-using-ciareaaverage
-    func averageColor(areaSize: Float=0)->UIColor?{//return average color of an area of the image : if area < 1 => get area left + area right
+    func averageColor(areaSize: Float=0)->UIColor?{//return average color of an area of the image : if area < 1 => get average color of area left + area right
         guard let inputImage = CIImage(image: self) else { return nil }
         let context = CIContext(options: [.workingColorSpace: kCFNull as Any])
         var colors:[UInt8]=[]
